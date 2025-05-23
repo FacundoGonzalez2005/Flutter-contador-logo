@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
+// Clase principal del proyecto
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -13,12 +14,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CounterScreen(),
+      debugShowCheckedModeBanner: false, // Oculta el banner de debug
+      home: CounterScreen(), // Pantalla principal
     );
   }
 }
 
+// Pantalla principal del contador
 class CounterScreen extends StatefulWidget {
   const CounterScreen({super.key});
 
@@ -30,24 +32,27 @@ class _CounterScreenState extends State<CounterScreen> {
   int counter = 0;
   double rotationSpeed = 1; // 1: derecha, -1: izquierda, 0: detenido
 
+  // Es un método que creamos dentro de la clase _CounterScreenState
   void increase() {
     counter++;
-    rotationSpeed = 1;
-    setState(() {});
+    rotationSpeed = 1; // cambia dirección
+    setState(() {}); // actualiza estado
   }
 
+  // Es un método que creamos dentro de la clase _CounterScreenState
   void decrease() {
     if (counter > 0) {
       counter--;
-      rotationSpeed = -1;
-      setState(() {});
+      rotationSpeed = -1; // cambia dirección inversa
+      setState(() {}); // actualiza estado
     }
   }
 
+  // Es un método que creamos dentro de la clase _CounterScreenState
   void reset() {
     counter = 0;
-    rotationSpeed = 0;
-    setState(() {});
+    rotationSpeed = 0; // detiene rotación
+    setState(() {}); // actualiza estado
   }
 
   @override
@@ -88,7 +93,9 @@ class _CounterScreenState extends State<CounterScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // Extraemos el widget Row para optimizar el código
       floatingActionButton: CustomFloatingActions(
+        // Se está mandando la referencia a la función, no lo estoy ejecutando
         increaseFn: increase,
         decreaseFn: decrease,
         resetFn: reset,
@@ -97,11 +104,14 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 }
 
+// Widget personalizado para los botones flotantes
 class CustomFloatingActions extends StatelessWidget {
+  // Declaro las funciones
   final Function increaseFn;
   final Function decreaseFn;
   final Function resetFn;
 
+  // Constructor: agregamos las funciones como required
   const CustomFloatingActions({
     super.key,
     required this.increaseFn,
@@ -115,6 +125,7 @@ class CustomFloatingActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         FloatingActionButton(
+          // Retorna el llamado de la función setState, que a su vez, ejecuta el cambio de estado
           onPressed: () => decreaseFn(),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
@@ -137,6 +148,7 @@ class CustomFloatingActions extends StatelessWidget {
   }
 }
 
+// Widget que rota el logo de Flutter
 class RotatingFlutterLogo extends StatefulWidget {
   final double size;
   final double speed; // 1: derecha, -1: izquierda, 0: detenido
@@ -161,23 +173,24 @@ class _RotatingFlutterLogoState extends State<RotatingFlutterLogo>
     _controller = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
-    )..repeat();
+    )..repeat(); // Comienza la animación
   }
 
+  // Se llama cuando el widget se actualiza (por ejemplo, al cambiar la velocidad)
   @override
   void didUpdateWidget(RotatingFlutterLogo oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.speed == 0) {
-      _controller.stop();
+      _controller.stop(); // Detiene la animación
     } else {
-      _controller.repeat();
+      _controller.repeat(); // Reanuda la animación
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller.dispose(); // Libera recursos
     super.dispose();
   }
 
@@ -188,8 +201,8 @@ class _RotatingFlutterLogoState extends State<RotatingFlutterLogo>
         CurvedAnimation(
           parent: _controller,
           curve: widget.speed > 0
-              ? Curves.linear
-              : const _ReverseCurve(Curves.linear),
+              ? Curves.linear // Rotación hacia la derecha
+              : const _ReverseCurve(Curves.linear), // Rotación hacia la izquierda
         ),
       ),
       child: FlutterLogo(size: widget.size),
@@ -197,6 +210,7 @@ class _RotatingFlutterLogoState extends State<RotatingFlutterLogo>
   }
 }
 
+// Curva personalizada para invertir la rotación
 class _ReverseCurve extends Curve {
   final Curve original;
   const _ReverseCurve(this.original);
